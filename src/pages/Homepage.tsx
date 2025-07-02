@@ -18,6 +18,7 @@ const Homepage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
+  const [search, setSearch] = useState("");
   const observer = useRef<IntersectionObserver | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -50,10 +51,11 @@ const Homepage: React.FC = () => {
   }, [page, fetchData]);
 
   useEffect(() => {
+    if (search !== "") return;
     if (!hasMore || loading) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new window.IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && !loading) {
         setPage((prev) => prev + 1);
       }
     });
@@ -61,17 +63,44 @@ const Homepage: React.FC = () => {
       observer.current.observe(sentinelRef.current);
     }
     return () => observer.current?.disconnect();
-  }, [hasMore, loading]);
+  }, [hasMore, loading, search]);
+
+  const filteredWorkers = workersArray.filter((worker) => {
+    const query = search.toLowerCase();
+    return worker.first_name.toLowerCase().includes(query) || worker.last_name.toLowerCase().includes(query) || worker.profession.toLowerCase().includes(query);
+  });
+
+  useEffect(() => {
+    console.log(
+      "Filtered Workers:",
+      filteredWorkers.map((worker) => ({
+        id: worker.id,
+        name: `${worker.first_name} ${worker.last_name}`,
+        profession: worker.profession,
+      }))
+    );
+  }, [filteredWorkers]);
 
   return (
     <div className="homepage">
       <h2>Find your Oompa Loompa</h2>
       <h3>There are more than 100k</h3>
-      <ul className="worker-list">
-        {workersArray.map((item) => (
-          <WorkerCard key={item.id} id={item.id} first_name={item.first_name} last_name={item.last_name} image={item.image} gender={item.gender} profession={item.profession} />
-        ))}
-      </ul>
+      <div className="search-bar">
+        <span className="search-icon" role="img" aria-label="search">
+          🔍
+        </span>
+        <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
+      </div>
+      <div className="worker-list">
+        {filteredWorkers.map((item) => {
+          console.log("Rendering key:", item.id);
+          return (
+            <div key={item.id} className="worker-item">
+              <WorkerCard id={item.id} first_name={item.first_name} last_name={item.last_name} image={item.image} gender={item.gender} profession={item.profession} />
+            </div>
+          );
+        })}
+      </div>
       <div ref={sentinelRef} style={{ height: 1 }} />
       {loading && <div>Loading...</div>}
       {error && <div>Error: {error}</div>}
