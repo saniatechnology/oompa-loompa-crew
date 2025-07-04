@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import WorkerCard from "../components/WorkerCard";
 import "./Homepage.css";
 
@@ -15,22 +16,23 @@ interface OompaLoompa {
 const Homepage: React.FC = () => {
   const [workersArray, setWorkersArray] = useState<OompaLoompa[]>([]);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState("");
-  const observer = useRef<IntersectionObserver | null>(null);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const fetchData = useCallback(async (pageNum: number) => {
-    setLoading(true);
+    console.log("Fetching page:", pageNum);
     setError(null);
     try {
       const res = await fetch(`https://2q2woep105.execute-api.eu-west-1.amazonaws.com/napptilus/oompa-loompas?page=${pageNum}`);
       if (!res.ok) throw new Error("Network response was not ok");
       const json = await res.json();
       if (json.results && json.results.length > 0) {
-        setWorkersArray((prev) => [...prev, ...json.results]);
+        setWorkersArray((prev) => {
+          const all = [...prev, ...json.results];
+          const unique = Array.from(new Map(all.map((w) => [w.id, w])).values());
+          return unique;
+        });
         setHasMore(true);
       } else {
         setHasMore(false);
@@ -41,8 +43,6 @@ const Homepage: React.FC = () => {
       } else {
         setError("An unknown error occurred");
       }
-    } finally {
-      setLoading(false);
     }
   }, []);
 
@@ -50,61 +50,35 @@ const Homepage: React.FC = () => {
     fetchData(page);
   }, [page, fetchData]);
 
-  useEffect(() => {
-    if (search !== "") return;
-    if (!hasMore || loading) return;
-    if (observer.current) observer.current.disconnect();
-    observer.current = new window.IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !loading) {
-        setPage((prev) => prev + 1);
-      }
-    });
-    if (sentinelRef.current) {
-      observer.current.observe(sentinelRef.current);
-    }
-    return () => observer.current?.disconnect();
-  }, [hasMore, loading, search]);
-
   const filteredWorkers = workersArray.filter((worker) => {
     const query = search.toLowerCase();
     return worker.first_name.toLowerCase().includes(query) || worker.last_name.toLowerCase().includes(query) || worker.profession.toLowerCase().includes(query);
   });
 
-  useEffect(() => {
-    console.log(
-      "Filtered Workers:",
-      filteredWorkers.map((worker) => ({
-        id: worker.id,
-        name: `${worker.first_name} ${worker.last_name}`,
-        profession: worker.profession,
-      }))
-    );
-  }, [filteredWorkers]);
+  const fetchNext = () => {
+    setPage((prev) => prev + 1);
+  };
 
   return (
     <div className="homepage">
-      <h2>Find your Oompa Loompa</h2>
-      <h3>There are more than 100k</h3>
       <div className="search-bar">
         <span className="search-icon" role="img" aria-label="search">
           🔍
         </span>
         <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
-      <div className="worker-list">
-        {filteredWorkers.map((item) => {
-          console.log("Rendering key:", item.id);
-          return (
+      <h2>Find your Oompa Loompa</h2>
+      <h3>There are more than 100k</h3>
+      <InfiniteScroll dataLength={filteredWorkers.length} next={fetchNext} hasMore={hasMore && !search} loader={<div>Loading...</div>} endMessage={<div>No more results.</div>}>
+        <div className="worker-list">
+          {filteredWorkers.map((item) => (
             <div key={item.id} className="worker-item">
               <WorkerCard id={item.id} first_name={item.first_name} last_name={item.last_name} image={item.image} gender={item.gender} profession={item.profession} />
             </div>
-          );
-        })}
-      </div>
-      <div ref={sentinelRef} style={{ height: 1 }} />
-      {loading && <div>Loading...</div>}
+          ))}
+        </div>
+      </InfiniteScroll>
       {error && <div>Error: {error}</div>}
-      {!hasMore && <div>No more results.</div>}
     </div>
   );
 };
