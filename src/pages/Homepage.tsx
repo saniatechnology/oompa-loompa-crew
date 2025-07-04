@@ -1,54 +1,56 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useSelector, useDispatch } from "react-redux";
+import type { RootState, AppDispatch } from "../store";
+import { setPageData } from "../slices/oompaLoompaSlice";
+import { fetchOompaLoompas } from "../api/oompaLoompaApi";
 import WorkerCard from "../components/WorkerCard";
 import "./Homepage.css";
 
-interface OompaLoompa {
-  id: number;
-  first_name: string;
-  last_name: string;
-  age: number;
-  image: string;
-  gender: string;
-  profession: string;
-}
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 const Homepage: React.FC = () => {
-  const [workersArray, setWorkersArray] = useState<OompaLoompa[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
+  const pages = useSelector((state: RootState) => state.oompaLoompa.pages);
   const [page, setPage] = useState(1);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState("");
 
-  const fetchData = useCallback(async (pageNum: number) => {
-    console.log("Fetching page:", pageNum);
-    setError(null);
-    try {
-      const res = await fetch(`https://2q2woep105.execute-api.eu-west-1.amazonaws.com/napptilus/oompa-loompas?page=${pageNum}`);
-      if (!res.ok) throw new Error("Network response was not ok");
-      const json = await res.json();
-      if (json.results && json.results.length > 0) {
-        setWorkersArray((prev) => {
-          const all = [...prev, ...json.results];
-          const unique = Array.from(new Map(all.map((w) => [w.id, w])).values());
-          return unique;
-        });
-        setHasMore(true);
-      } else {
-        setHasMore(false);
-      }
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("An unknown error occurred");
-      }
-    }
-  }, []);
+  // Flatten all workers from all fetched pages
+  const workersArray = Object.values(pages)
+    .flatMap((pageData) => pageData.workers)
+    .filter((w, i, arr) => arr.findIndex((x) => x.id === w.id) === i); // unique by id
 
   useEffect(() => {
+    const fetchData = async (pageNum: number) => {
+      const pageData = pages[pageNum];
+      const now = Date.now();
+      if (pageData && pageData.lastFetched && now - pageData.lastFetched < ONE_DAY_MS) {
+        console.log(`Using cached data for page ${pageNum}, not refetching from API.`);
+        setHasMore(true); // Assume more pages may exist
+        return;
+      }
+      console.log("Fetching page from API:", pageNum);
+      setError(null);
+      try {
+        const json = await fetchOompaLoompas(pageNum);
+        if (json.results && json.results.length > 0) {
+          dispatch(setPageData({ page: pageNum, workers: json.results, lastFetched: now }));
+          setHasMore(true);
+        } else {
+          setHasMore(false);
+        }
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
+      }
+    };
     fetchData(page);
-  }, [page, fetchData]);
+  }, [page, pages, dispatch]);
 
   const filteredWorkers = workersArray.filter((worker) => {
     const query = search.toLowerCase();
