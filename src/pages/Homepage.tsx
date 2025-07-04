@@ -12,7 +12,8 @@ const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 const Homepage: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const pages = useSelector((state: RootState) => state.oompaLoompa.pages);
-  const [page, setPage] = useState(1);
+  const maxPage = Math.max(1, ...Object.keys(pages).map(Number));
+  const [page, setPage] = useState(maxPage);
   const [error, setError] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState("");
@@ -58,7 +59,7 @@ const Homepage: React.FC = () => {
   });
 
   const fetchNext = () => {
-    setPage((prev) => prev + 1);
+    setPage(maxPage + 1);
   };
 
   return (
