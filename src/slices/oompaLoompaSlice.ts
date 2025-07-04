@@ -29,12 +29,19 @@ interface PageData {
   lastFetched: number | null;
 }
 
+interface WorkerDetailData {
+  worker: OompaLoompa;
+  lastFetched: number;
+}
+
 interface OompaLoompaState {
   pages: Record<number, PageData>;
+  details: Record<number, WorkerDetailData>;
 }
 
 const initialState: OompaLoompaState = {
   pages: {},
+  details: {},
 };
 
 const oompaLoompaSlice = createSlice({
@@ -45,8 +52,15 @@ const oompaLoompaSlice = createSlice({
       const { page, workers, lastFetched } = action.payload;
       state.pages[page] = { workers, lastFetched };
     },
+    setWorkerDetail(state, action: PayloadAction<{ id: number; worker: OompaLoompa; lastFetched: number }>) {
+      const { id, worker, lastFetched } = action.payload;
+      state.details[id] = { worker, lastFetched };
+    },
     clearAllPages(state) {
       state.pages = {};
+    },
+    clearAllDetails(state) {
+      state.details = {};
     },
   },
 });
@@ -56,5 +70,5 @@ export const selectAllWorkers = createSelector(
   (pages) => Object.values(pages).flatMap((page) => page.workers)
 );
 
-export const { setPageData, clearAllPages } = oompaLoompaSlice.actions;
+export const { setPageData, setWorkerDetail, clearAllPages, clearAllDetails } = oompaLoompaSlice.actions;
 export default oompaLoompaSlice.reducer;

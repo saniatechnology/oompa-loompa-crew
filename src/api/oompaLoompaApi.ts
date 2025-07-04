@@ -3,3 +3,9 @@ export async function fetchOompaLoompas(page: number) {
   if (!res.ok) throw new Error("Network response was not ok");
   return res.json();
 }
+
+export async function fetchOompaLoompaById(id: number) {
+  const res = await fetch(`https://2q2woep105.execute-api.eu-west-1.amazonaws.com/napptilus/oompa-loompas/${id}`);
+  if (!res.ok) throw new Error("Network response was not ok");
+  return res.json();
+}

@@ -65,9 +65,7 @@ const Homepage: React.FC = () => {
   return (
     <div className="homepage">
       <div className="search-bar">
-        <span className="search-icon" role="img" aria-label="search">
-          🔍
-        </span>
+        <img className="search-icon" src="https://s3.eu-central-1.amazonaws.com/napptilus/level-test/imgs/ic_search.png" alt="search" />
         <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
       <h2>Find your Oompa Loompa</h2>
