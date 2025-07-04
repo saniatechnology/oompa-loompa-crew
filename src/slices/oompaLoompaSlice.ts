@@ -1,5 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSelector } from "@reduxjs/toolkit";
+import type { RootState } from "../store";
+
+interface Favorite {
+  color: string;
+  food: string;
+  random_string: string;
+  song: string;
+}
 
 interface OompaLoompa {
   id: number;
@@ -9,6 +18,10 @@ interface OompaLoompa {
   image: string;
   gender: string;
   profession: string;
+  email?: string;
+  country?: string;
+  height?: number;
+  favorite?: Favorite;
 }
 
 interface PageData {
@@ -37,6 +50,11 @@ const oompaLoompaSlice = createSlice({
     },
   },
 });
+
+export const selectAllWorkers = createSelector(
+  (state: RootState) => state.oompaLoompa.pages,
+  (pages) => Object.values(pages).flatMap((page) => page.workers)
+);
 
 export const { setPageData, clearAllPages } = oompaLoompaSlice.actions;
 export default oompaLoompaSlice.reducer;

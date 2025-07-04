@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import "./WorkerCard.css";
 
 interface WorkerCardProps {
@@ -11,18 +12,25 @@ interface WorkerCardProps {
 }
 
 const WorkerCard: React.FC<WorkerCardProps> = ({ id, first_name, last_name, image, gender, profession }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/${id}`);
+  };
+
   return (
-    <div className="worker-card">
-      <img src={image} alt={`${first_name} ${last_name}`} />
-      <div className="worker-details">
-        <div className="worker-id">ID: {id}</div>
-        <div className="worker-name">
-          {first_name} {last_name}
+    <button className="worker-card-button" onClick={handleClick} style={{ all: "unset", cursor: "pointer", display: "block", width: "100%" }}>
+      <div className="worker-card">
+        <img src={image} alt={`${first_name} ${last_name}`} className="worker-image" />
+        <div className="worker-info">
+          <h4>
+            {first_name} {last_name}
+          </h4>
+          <p>{profession}</p>
+          <p>{gender}</p>
         </div>
-        <div className="worker-gender">{gender}</div>
-        <div className="worker-profession">{profession}</div>
       </div>
-    </div>
+    </button>
   );
 };
 
