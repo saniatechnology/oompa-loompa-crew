@@ -1,6 +1,20 @@
 .homepage {
-  padding-top: 5rem;
+  width: 100%;
 }
+
+.homepage h2 {
+  font-size: 3rem;
+  font-weight: 300;
+  margin-bottom: 0;
+}
+
+.homepage h3 {
+  font-size: 2.3rem;
+  font-weight: 400;
+  color: #636363;
+  margin-top: 0;
+}
+
 .worker-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -8,27 +22,4 @@
   list-style: none;
   padding: 0;
   margin: 0;
-}
-.search-bar {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-  max-width: 400px;
-  background: #fff;
-  border-radius: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-  padding: 0.5rem 1rem;
-}
-.search-icon {
-  font-size: 1.3rem;
-  margin-right: 0.7rem;
-  color: #888;
-}
-.search-bar input {
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  flex: 1;
-  background: transparent;
-  padding: 0.5rem 0;
 }

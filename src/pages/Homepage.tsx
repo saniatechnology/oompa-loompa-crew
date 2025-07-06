@@ -5,6 +5,7 @@ import type { RootState, AppDispatch } from "../store";
 import { setPageData } from "../slices/oompaLoompaSlice";
 import { fetchOompaLoompas } from "../api/oompaLoompaApi";
 import WorkerCard from "../components/WorkerCard";
+import SearchBar from "../components/SearchBar";
 import "./Homepage.css";
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
@@ -64,10 +65,7 @@ const Homepage: React.FC = () => {
 
   return (
     <div className="homepage">
-      <div className="search-bar">
-        <img className="search-icon" src="https://s3.eu-central-1.amazonaws.com/napptilus/level-test/imgs/ic_search.png" alt="search" />
-        <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
-      </div>
+      <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} />
       <h2>Find your Oompa Loompa</h2>
       <h3>There are more than 100k</h3>
       <InfiniteScroll dataLength={filteredWorkers.length} next={fetchNext} hasMore={hasMore && !search} loader={<div>Loading...</div>} endMessage={<div>No more results.</div>}>
