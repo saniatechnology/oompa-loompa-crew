@@ -19,15 +19,17 @@ const WorkerCard: React.FC<WorkerCardProps> = ({ id, first_name, last_name, imag
   };
 
   return (
-    <button className="worker-card-button" onClick={handleClick} style={{ all: "unset", cursor: "pointer", display: "block", width: "100%" }}>
+    <button className="worker-card-button" onClick={handleClick}>
       <div className="worker-card">
-        <img src={image} alt={`${first_name} ${last_name}`} className="worker-image" />
+        <div className="image-container">
+          <img src={image} alt={`${first_name} ${last_name}`} className="worker-image" />
+        </div>
         <div className="worker-info">
-          <h4>
+          <h4 className="worker-name">
             {first_name} {last_name}
           </h4>
-          <p>{profession}</p>
-          <p>{gender}</p>
+          <p className="worker-gender">{gender === "M" ? "Male" : "Female"}</p>
+          <p className="worker-profession">{profession}</p>
         </div>
       </div>
     </button>
