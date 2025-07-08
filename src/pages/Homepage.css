@@ -18,9 +18,21 @@
 
 .worker-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 2rem 1.5rem;
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+@media (min-width: 600px) {
+  .worker-list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 900px) {
+  .worker-list {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
 }

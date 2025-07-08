@@ -16,7 +16,19 @@
   align-items: center;
   width: 100%;
   max-width: 1280px;
-  padding: 0.7rem 5rem;
+  padding: 0.7rem 1rem;
+}
+
+@media (min-width: 600px) {
+  .header-content {
+    padding: 0.7rem 3rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .header-content {
+    padding: 0.7rem 5rem;
+  }
 }
 
 .header__logo {
