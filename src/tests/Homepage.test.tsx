@@ -2,12 +2,11 @@ import React from "react";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, it, expect } from "vitest";
 import "@testing-library/jest-dom/vitest";
-// import "@testing-library/jest-dom";
 import { Provider } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import { MemoryRouter } from "react-router";
 import oompaLoompaReducer from "../slices/oompaLoompaSlice";
-import Homepage from "./Homepage";
+import Homepage from "../pages/Homepage";
 
 interface PreloadedState {
   oompaLoompa: ReturnType<typeof oompaLoompaReducer>;
