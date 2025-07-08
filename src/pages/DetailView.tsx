@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchOompaLoompaById } from "../api/oompaLoompaApi";
 import { setWorkerDetail } from "../slices/oompaLoompaSlice";
 import type { RootState, AppDispatch } from "../store";
+import "./DetailView.css";
 
 interface Favorite {
   color: string;
@@ -72,29 +73,29 @@ const DetailView: React.FC = () => {
   if (!worker) return <div>Worker not found.</div>;
 
   return (
-    <div>
-      <h2>
-        {worker.first_name} {worker.last_name}
-      </h2>
+    <div className="detail-view">
       <img src={worker.image} alt={`${worker.first_name} ${worker.last_name}`} />
-      <p>Profession: {worker.profession}</p>
-      <p>Gender: {worker.gender}</p>
-      <p>Age: {worker.age}</p>
-      {worker.email && <p>Email: {worker.email}</p>}
-      {worker.country && <p>Country: {worker.country}</p>}
-      {worker.height && <p>Height: {worker.height}</p>}
-      {worker.favorite && (
-        <div>
-          <h3>Favorites</h3>
-          <p>Color: {worker.favorite.color}</p>
-          <p>Food: {worker.favorite.food}</p>
-          <p>Random String: {worker.favorite.random_string}</p>
-          <div>
-            <strong>Song:</strong>
-            <pre style={{ whiteSpace: "pre-wrap" }}>{worker.favorite.song}</pre>
-          </div>
+      <div className="detail-info">
+        <div className="detail-info-header">
+          <h2>
+            {worker.first_name} {worker.last_name}
+          </h2>
+          <p className="detail-info-gender">{worker.gender === "M" ? "Male" : "Female"}</p>
+          <p className="detail-info-profession">{worker.profession}</p>
         </div>
-      )}
+        <p>Age: {worker.age || "N/A"}</p>
+        <p>Email: {worker.email || "N/A"}</p>
+        <p>Country: {worker.country || "N/A"}</p>
+        <p>Height: {worker.height || "N/A"}</p>
+        {worker.favorite && (
+          <>
+            <p>Favorite color: {worker.favorite.color || "N/A"}</p>
+            <p>Favorite food: {worker.favorite.food || "N/A"}</p>
+            <p>Song:</p>
+            <p style={{ whiteSpace: "pre-wrap" }}>{worker.favorite.song || "N/A"}</p>
+          </>
+        )}
+      </div>
     </div>
   );
 };
