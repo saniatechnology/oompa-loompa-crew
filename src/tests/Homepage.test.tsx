@@ -31,8 +31,8 @@ const initialState: PreloadedState = {
         workers: [
           {
             id: 1,
-            first_name: "Willy",
-            last_name: "Wonka",
+            firstName: "Willy",
+            lastName: "Wonka",
             age: 50,
             image: "wonka.jpg",
             gender: "M",
@@ -40,8 +40,8 @@ const initialState: PreloadedState = {
           },
           {
             id: 2,
-            first_name: "Charlie",
-            last_name: "Bucket",
+            firstName: "Charlie",
+            lastName: "Bucket",
             age: 12,
             image: "charlie.jpg",
             gender: "M",

@@ -54,11 +54,11 @@ const DetailView: React.FC = () => {
 
   return (
     <div className="detail-view">
-      <img src={worker.image} alt={`${worker.first_name} ${worker.last_name}`} />
+      <img src={worker.image} alt={`${worker.firstName} ${worker.lastName}`} />
       <div className="detail-info">
         <div className="detail-info-header">
           <h2>
-            {worker.first_name} {worker.last_name}
+            {worker.firstName} {worker.lastName}
           </h2>
           <p className="detail-info-gender">{worker.gender === "M" ? "Male" : "Female"}</p>
           <p className="detail-info-profession">{worker.profession}</p>

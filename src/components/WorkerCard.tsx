@@ -1,35 +1,27 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import "./WorkerCard.css";
+import type { Worker } from "../types/Worker";
 
-interface WorkerCardProps {
-  id: number;
-  first_name: string;
-  last_name: string;
-  image: string;
-  gender: string;
-  profession: string;
-}
-
-const WorkerCard: React.FC<WorkerCardProps> = ({ id, first_name, last_name, image, gender, profession }) => {
+const WorkerCard: React.FC<Worker> = (workerData: Worker) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/${id}`);
+    navigate(`/${workerData.id}`);
   };
 
   return (
     <button className="worker-card-button" onClick={handleClick}>
       <div className="worker-card">
         <div className="image-container">
-          <img src={image} alt={`${first_name} ${last_name}`} className="worker-image" loading="lazy" />
+          <img src={workerData.image} alt={`${workerData.firstName} ${workerData.lastName}`} className="worker-image" loading="lazy" />
         </div>
         <div className="worker-info">
           <h4 className="worker-name">
-            {first_name} {last_name}
+            {workerData.firstName} {workerData.lastName}
           </h4>
-          <p className="worker-gender">{gender === "M" ? "Male" : "Female"}</p>
-          <p className="worker-profession">{profession}</p>
+          <p className="worker-gender">{workerData.gender === "M" ? "Male" : "Female"}</p>
+          <p className="worker-profession">{workerData.profession}</p>
         </div>
       </div>
     </button>

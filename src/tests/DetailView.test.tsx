@@ -11,8 +11,8 @@ import * as api from "../api/oompaLoompaApi";
 
 const mockWorker = {
   id: 1,
-  first_name: "Willy",
-  last_name: "Wonka",
+  firstName: "Willy",
+  lastName: "Wonka",
   age: 50,
   image: "wonka.jpg",
   gender: "M",
@@ -23,7 +23,7 @@ const mockWorker = {
   favorite: {
     color: "purple",
     food: "chocolate",
-    random_string: "Oompa Loompa",
+    randomString: "Oompa Loompa",
     song: "Oompa Loompa doompadee doo",
   },
 };

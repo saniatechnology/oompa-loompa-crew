@@ -1,14 +1,14 @@
 export interface Favorite {
   color: string;
   food: string;
-  random_string: string;
+  randomString: string;
   song: string;
 }
 
 export interface Worker {
   id: number;
-  first_name: string;
-  last_name: string;
+  firstName: string;
+  lastName: string;
   age: number;
   image: string;
   gender: string;

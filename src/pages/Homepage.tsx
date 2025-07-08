@@ -26,7 +26,7 @@ const Homepage: React.FC = () => {
 
   const filteredWorkers = useMemo(() => {
     const query = search.toLowerCase();
-    return workersArray.filter((worker) => worker.first_name.toLowerCase().includes(query) || worker.last_name.toLowerCase().includes(query) || worker.profession.toLowerCase().includes(query));
+    return workersArray.filter((worker) => worker.firstName.toLowerCase().includes(query) || worker.lastName.toLowerCase().includes(query) || worker.profession.toLowerCase().includes(query));
   }, [workersArray, search]);
 
   useEffect(() => {
@@ -70,9 +70,9 @@ const Homepage: React.FC = () => {
       <h3>There are more than 100k</h3>
       <InfiniteScroll dataLength={filteredWorkers.length} next={fetchNext} hasMore={hasMore && !search} loader={<div>Loading...</div>} endMessage={<div>No more results.</div>}>
         <div className="worker-list">
-          {filteredWorkers.map((item) => (
-            <div key={item.id} className="worker-item">
-              <WorkerCard id={item.id} first_name={item.first_name} last_name={item.last_name} image={item.image} gender={item.gender} profession={item.profession} />
+          {filteredWorkers.map((workerData) => (
+            <div key={workerData.id} className="worker-item">
+              <WorkerCard {...workerData} />
             </div>
           ))}
         </div>
