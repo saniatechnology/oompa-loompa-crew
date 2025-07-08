@@ -19,10 +19,9 @@ const Homepage: React.FC = () => {
   const [hasMore, setHasMore] = useState(true);
   const [search, setSearch] = useState("");
 
-  // Flatten all workers from all fetched pages
   const workersArray = Object.values(pages)
     .flatMap((pageData) => pageData.workers)
-    .filter((w, i, arr) => arr.findIndex((x) => x.id === w.id) === i); // unique by id
+    .filter((w, i, arr) => arr.findIndex((x) => x.id === w.id) === i); // Avoid duplicates
 
   const filteredWorkers = useMemo(() => {
     const query = search.toLowerCase();
@@ -41,9 +40,9 @@ const Homepage: React.FC = () => {
       console.log("Fetching page from API:", pageNum);
       setError(null);
       try {
-        const json = await fetchOompaLoompas(pageNum);
-        if (json.results && json.results.length > 0) {
-          dispatch(setPageData({ page: pageNum, workers: json.results, lastFetched: now }));
+        const results = await fetchOompaLoompas(pageNum);
+        if (results && results.length > 0) {
+          dispatch(setPageData({ page: pageNum, workers: results, lastFetched: now }));
           setHasMore(true);
         } else {
           setHasMore(false);
