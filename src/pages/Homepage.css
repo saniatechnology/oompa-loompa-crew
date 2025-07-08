@@ -2,18 +2,19 @@
   width: 100%;
 }
 
-.homepage h2 {
+.homepage h1 {
   font-size: 3rem;
   font-weight: 500;
   margin-top: 2rem;
   margin-bottom: 0;
 }
 
-.homepage h3 {
+.homepage h2 {
   font-size: 2.3rem;
   font-weight: 400;
   color: #636363;
-  margin-top: -0.6rem;
+  margin-top: 0;
+  margin-bottom: 3rem;
 }
 
 .worker-list {

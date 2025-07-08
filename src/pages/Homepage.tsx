@@ -69,8 +69,8 @@ const Homepage: React.FC = () => {
   return (
     <div className="homepage">
       <SearchBar value={search} onChange={(e) => setSearch(e.target.value)} />
-      <h2>Find your Oompa Loompa</h2>
-      <h3>There are more than 100k</h3>
+      <h1>Find your Oompa Loompa</h1>
+      <h2>There are more than 100k</h2>
       <InfiniteScroll dataLength={filteredWorkers.length} next={fetchNext} hasMore={hasMore && !search} loader={<div>Loading...</div>} endMessage={<div>No more results.</div>}>
         <div className="worker-list">
           {filteredWorkers.map((workerData) => (
