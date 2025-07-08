@@ -2,35 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSelector } from "@reduxjs/toolkit";
 import type { RootState } from "../store";
-
-interface Favorite {
-  color: string;
-  food: string;
-  random_string: string;
-  song: string;
-}
-
-interface OompaLoompa {
-  id: number;
-  first_name: string;
-  last_name: string;
-  age: number;
-  image: string;
-  gender: string;
-  profession: string;
-  email?: string;
-  country?: string;
-  height?: number;
-  favorite?: Favorite;
-}
+import type { Worker } from "../types/Worker";
 
 interface PageData {
-  workers: OompaLoompa[];
+  workers: Worker[];
   lastFetched: number | null;
 }
 
 interface WorkerDetailData {
-  worker: OompaLoompa;
+  worker: Worker;
   lastFetched: number;
 }
 
@@ -48,11 +28,11 @@ const oompaLoompaSlice = createSlice({
   name: "oompaLoompa",
   initialState,
   reducers: {
-    setPageData(state, action: PayloadAction<{ page: number; workers: OompaLoompa[]; lastFetched: number }>) {
+    setPageData(state, action: PayloadAction<{ page: number; workers: Worker[]; lastFetched: number }>) {
       const { page, workers, lastFetched } = action.payload;
       state.pages[page] = { workers, lastFetched };
     },
-    setWorkerDetail(state, action: PayloadAction<{ id: number; worker: OompaLoompa; lastFetched: number }>) {
+    setWorkerDetail(state, action: PayloadAction<{ id: number; worker: Worker; lastFetched: number }>) {
       const { id, worker, lastFetched } = action.payload;
       state.details[id] = { worker, lastFetched };
     },

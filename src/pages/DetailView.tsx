@@ -5,27 +5,7 @@ import { fetchOompaLoompaById } from "../api/oompaLoompaApi";
 import { setWorkerDetail } from "../slices/oompaLoompaSlice";
 import type { RootState, AppDispatch } from "../store";
 import "./DetailView.css";
-
-interface Favorite {
-  color: string;
-  food: string;
-  random_string: string;
-  song: string;
-}
-
-interface Worker {
-  id: number;
-  first_name: string;
-  last_name: string;
-  age: number;
-  image: string;
-  gender: string;
-  profession: string;
-  email?: string;
-  country?: string;
-  height?: number;
-  favorite?: Favorite;
-}
+import type { Worker } from "../types/Worker";
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
