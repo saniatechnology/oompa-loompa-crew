@@ -22,7 +22,7 @@ const WorkerCard: React.FC<WorkerCardProps> = ({ id, first_name, last_name, imag
     <button className="worker-card-button" onClick={handleClick}>
       <div className="worker-card">
         <div className="image-container">
-          <img src={image} alt={`${first_name} ${last_name}`} className="worker-image" />
+          <img src={image} alt={`${first_name} ${last_name}`} className="worker-image" loading="lazy" />
         </div>
         <div className="worker-info">
           <h4 className="worker-name">
@@ -36,4 +36,4 @@ const WorkerCard: React.FC<WorkerCardProps> = ({ id, first_name, last_name, imag
   );
 };
 
-export default WorkerCard;
+export default React.memo(WorkerCard);

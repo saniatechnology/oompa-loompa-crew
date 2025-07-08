@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { useSelector, useDispatch } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
@@ -23,6 +23,11 @@ const Homepage: React.FC = () => {
   const workersArray = Object.values(pages)
     .flatMap((pageData) => pageData.workers)
     .filter((w, i, arr) => arr.findIndex((x) => x.id === w.id) === i); // unique by id
+
+  const filteredWorkers = useMemo(() => {
+    const query = search.toLowerCase();
+    return workersArray.filter((worker) => worker.first_name.toLowerCase().includes(query) || worker.last_name.toLowerCase().includes(query) || worker.profession.toLowerCase().includes(query));
+  }, [workersArray, search]);
 
   useEffect(() => {
     const fetchData = async (pageNum: number) => {
@@ -53,11 +58,6 @@ const Homepage: React.FC = () => {
     };
     fetchData(page);
   }, [page, pages, dispatch]);
-
-  const filteredWorkers = workersArray.filter((worker) => {
-    const query = search.toLowerCase();
-    return worker.first_name.toLowerCase().includes(query) || worker.last_name.toLowerCase().includes(query) || worker.profession.toLowerCase().includes(query);
-  });
 
   const fetchNext = () => {
     setPage(maxPage + 1);
