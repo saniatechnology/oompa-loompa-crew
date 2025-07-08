@@ -29,6 +29,10 @@ const Homepage: React.FC = () => {
   }, [workersArray, search]);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     const fetchData = async (pageNum: number) => {
       const pageData = pages[pageNum];
       const now = Date.now();
